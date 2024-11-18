@@ -207,7 +207,6 @@ function draw() {
     if (ballY + ballDY < ballRadius) {
         ballDY = -ballDY;
     } else if (ballY + ballDY > canvas.height - ballRadius) {
-        // Provjera ako loptica padne ispod palice
         if (
             ballX + ballRadius > paddleX &&
             ballX - ballRadius < paddleX + paddleWidth &&
@@ -219,10 +218,17 @@ function draw() {
 
             // Kut odbijanja loptice od palice ovisi o postavljenim brzinama ballDX i ballDY
             // Promjena smjera kretanja po x-osi na temelju mjesta dodira s palicom
-            ballDX = distanceFromCenter * 0.1; // Skaliranje brzine prema udaljenosti od centra palice
+            // Skaliranje brzine prema udaljenosti od centra palice
+            ballDX = distanceFromCenter * 0.1;
 
             // Loptica se uvijek odbija prema gore od palice
             ballDY = -Math.abs(ballDY);
+
+            // Skaliranje brzine tako da ukupna brzina ostane konstantna
+            let magnitude = Math.sqrt(ballDX ** 2 + ballDY ** 2);
+            let scale = 5 / magnitude;
+            ballDX *= scale;
+            ballDY *= scale;
         } else {
             // Igra završava porazom ako loptica padne ispod palice
             gameOver = true;
